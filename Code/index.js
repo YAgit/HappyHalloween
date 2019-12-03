@@ -35,11 +35,20 @@ const LaunchRequestHandler = {
         //welcome message
         let speechText = 'Happy Halloween ... make sure you give the trick or treaters lots of candy, and let me greet them for you. I will say a new and fun greeting every time you say Next. Just let me know when you are ready with candy when the doorbell rings! Are you ready for a greeting?';
         //welcome screen message
-        let displayText = ""
+        const data = require('./apldata/halloweenapldata.json');
+        const template = require('./apltemplates/halloweenmain.json');
+        //let displayText = 'Happy Halloween'
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
-            .withSimpleCard(appName, displayText)
+            .withSimpleCard(appName, '')
+            .addDirective({
+                type: 'Alexa.Presentation.APL.RenderDocument',
+                version: '1.0',
+                document: template,
+                datasources: data
+            })
+            
             .getResponse();
     }
 };
@@ -132,9 +141,11 @@ const CancelAndStopIntentHandler = {
     },
     handle(handlerInput) {
         let speechText = 'Goodbye';
+
         return handlerInput.responseBuilder
             .speak(speechText)
             .withSimpleCard(appName, speechText)
+            .withShouldEndSession(true)
             .getResponse();
     }
 };
